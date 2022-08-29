@@ -1,1 +1,27 @@
-console.log("Hello")
+const express=require('express')
+const app=express()
+const bp=require('body-parser')
+const cors=require('cors')
+const authorize=require('./middleware/authorize')
+
+app.use(cors({origin:'http://localhost:3002',credentials:true}))
+app.use(bp.json())
+const cookie=require('cookie-parser')
+app.use(cookie())
+app.get('/Home',(req,res)=>{
+    res.send("M tera Bhai ni Hu")
+})
+const usermodel=require('./models/UserModel')
+console.log(usermodel)
+const signup=require('./controllers/SignupControllers')
+app.use('/',signup)
+const signin=require('./controllers/SignInControllers')
+app.use('/',signin)
+app.post('/delete',authorize,(req,res)=>{
+    res.send({"msg":'deleted successfully'})
+})
+// app.post('/update',authorize,(req,res)=>{
+//     console.log(req.cookies)
+//    res.send({"msg":"you are authorized"})
+// })
+app.listen(3001,()=>console.log('server started'))
